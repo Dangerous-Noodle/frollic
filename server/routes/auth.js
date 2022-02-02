@@ -4,6 +4,12 @@ const authRouter = express.Router();
 
 
 // auth route will go here
+
+router.get('/validateusername', (req, res) => {
+  console.log('hello');
+  res.status(200).send('the username might be available, idk!');
+});
+
 router.post('/login', (req, res) => {
   console.log('hello');
   res.status(200).send('hello there!');

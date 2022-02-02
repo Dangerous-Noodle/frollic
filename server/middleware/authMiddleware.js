@@ -8,69 +8,54 @@ const db = require('../models/dbModel');
 // req.body.auth.username
 // req.body.auth.password
 
-
+// Place this in app.use so it is used globally
 function globalAuthMiddleware(req, res, next) {
 
-  const LOGIN = 'LOGIN';
-  const LOGOUT = 'LOGOUT';
-  const SIGNUP = 'SIGNUP';
-  const WORK_FACTOR = 10;
-  const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
-
   const uuidValidateV4 = input => uuid.validate(input) && uuid.version(input) === 4;
-  
-  res.locals.auth = 
-  { 
-    authenticated: false,
-    ssid: null,
-    userId: null,
-    username: null
-  };
 
-  switch (req.body.auth.authAction) {
-    case LOGIN:
-      console.log('Login');
-      // check password against database
-      // set cookie
-      break;
-    case LOGOUT:
-      console.log('Logout');
-      // delete cookie and mark session state as false in db
-      break;
-    case SIGNUP:
-      console.log('Signup');
-      const usrName = req.body.auth.username;
-      res.locals.auth.username = usrName;
-      bcrypt.hash(req.body.auth.password, WORK_FACTOR)
-      .then(hashedPwd => {
-        // create user in database
-        return db.query('INSERT INTO users (username, pwd) VALUES ($1, $2) RETURNING _id;', [usrName, hashedPwd]);
-      })
-      .then(res => {
-        console.log(res);
-        const id = res.rows[0]._id;
-        const session = uuid.v4();
-        res.locals.auth.ssid = session;
-        res.local.auth.userId = id;
-        // create session in database
-        return db.query('INSERT INTO session_log (user_id, ssid) VALUES ($1, $2)', [id, session]);
-      })
-      .then(res => {
-        // set ssid cookie in res object
-        res.cookie('ssid', session, {maxAge: THIRTY_DAYS, httpOnly: true})
-        res.locals.auth.authenticated = true;
-        return next();
-      })
-      .catch(err => next(err));
-      break;
-    default:
-      // check for a ssid cookie against the database
-      // validate ssid cookie
-      // if everything is in order the user is authenticated
-      return next();
+  res.locals.authInfo = { authenticated: false };
+  // check for ssid cookie presence
+  if (!req.cookies.ssid) return next();
+  // validate ssid cookie value
+  if (!uuidValidateV4(req.cookies.ssid)) {
+    console.log('Error: Received invalid SSID cookie');
+    // clear cookie
+    // return next(err);
   }
-
+  // check ssid against the database
+  // if found and isactive and is not expired => authenticate user
+  // else do nothing and continue
+  return next();
 }
 
 
-module.exports = globalAuthMiddleware;
+function signupUser(req, res, next) {
+
+  // validate body of request
+
+  const usrName = req.body.auth.username;
+  res.locals.auth.username = usrName;
+  bcrypt.hash(req.body.auth.password, WORK_FACTOR)
+  .then(hashedPwd => {
+    // create user in database
+    return db.query('INSERT INTO users (username, pwd) VALUES ($1, $2) RETURNING _id;', [usrName, hashedPwd]);
+  })
+  .then(result => {
+    console.log(result);
+    const id = result.rows[0]._id;
+    res.locals.auth.userId = id;
+    const session = uuid.v4();
+    result.locals.auth.ssid = session;
+    // create session in database
+    return db.query('INSERT INTO session_log (user_id, ssid) VALUES ($1, $2)', [id, session]);
+  })
+  .then(result => {
+    console.log(result);
+    // set ssid cookie in res object
+    res.cookie('ssid', session, {maxAge: THIRTY_DAYS, httpOnly: true})
+    res.locals.auth.authenticated = true;
+    return next();
+  })
+  .catch(err => next(err));
+
+}
