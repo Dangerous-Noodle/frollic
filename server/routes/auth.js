@@ -7,19 +7,19 @@ const authRouter = express.Router();
 // auth route will go here
 
 authRouter.get('/validateusername/:username', validateUsername, (req, res) => {
-  res.status(200).send(`Username ${req.params.username} found!`);
+  res.json({username: req.params.username, found: true });
 });
 
 authRouter.post('/login', loginUser, createSession, (req, res) => {
-  res.status(200).send('Login success!');
+  res.json('Login success!');
 });
 
 authRouter.post('/logout', logoutUser, (req, res) => {
-  res.status(200).send('Logged out!');
+  res.json('Logged out!');
 });
 
 authRouter.post('/signup', signupUser, createSession, (req, res) => {
-  return res.status(200).send('Signup success!');
+  res.json('Signup success!');
 });
 
 module.exports = authRouter;

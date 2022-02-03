@@ -8,6 +8,10 @@ function generateCookieParams() {
   return { maxAge: ONE_MONTH, httpOnly: true, path: '/' };
 }
 
+function formatResponse(success, message)  {
+  return { success, message };
+}
+
 
 // req.body.auth.authAction
 // req.body.auth.username
@@ -59,10 +63,10 @@ function signupUser(req, res, next) {
 
   // validate body of request
 
-  if (!req.body.auth) return res.status(400).send('Bad request: please specify username and password');
+  if (!req.body.auth) return res.json(formatResponse(false, 'Bad request: please specify username and password'));
 
   const { username, password } = req.body.auth;
-  if (!username || !password) return res.status(400).send('Bad request: please specify username and password');
+  if (!username || !password) return res.json(formatResponse(false, 'Bad request: please specify username and password'));
 
 
   bcrypt.hash(password, 10)
@@ -85,23 +89,23 @@ function signupUser(req, res, next) {
   })
   .catch(err => {
     if (err.constraint === 'users_username_key') {
-      return res.status(400).send('Error: username already exists in database');
+      return res.json(formatResponse(false, 'Error: username already exists in database'));
     }
     return next(err);
   })
 }
 
 function loginUser(req, res, next) {
-  if (!req.body.auth) return res.status(400).send('Bad request: please specify username and password');
+  if (!req.body.auth) return res.json(formatResponse(false, 'Bad request: please specify username and password'));
 
   const { username, password } = req.body.auth;
-  if (!username || !password) return res.status(400).send('Bad request: please specify username and password');
+  if (!username || !password) return res.json(formatResponse(false, 'Bad request: please specify username and password'));
 
   const dbQuery = 'SELECT _id, pwd FROM users WHERE username = $1';
   const vars = [username];
   db.query(dbQuery, vars)
     .then(result => {
-      if (!result.rows.length) return res.status(400).send('Incorrect username and/or password');
+      if (!result.rows.length) return res.json(formatResponse(false, 'Error: incorrect username and/or password'));
       const { _id, pwd } = result.rows[0];
       res.locals.createSession = {
         userId: _id,
@@ -111,7 +115,7 @@ function loginUser(req, res, next) {
     })
     .then(result => {
       if (!result) {
-        return res.status(400).send('Incorrect username and/or password');
+        return res.json(formatResponse(false, 'Error: incorrect username and/or password'));
       } 
       return next();
     })
@@ -119,7 +123,7 @@ function loginUser(req, res, next) {
 
 function logoutUser(req, res, next) {
   const session = req.cookies.ssid;
-  if (!session) return res.status(400).send('You are not logged in');
+  if (!session) return res.json(formatResponse(false, 'You are not logged in'));
   res.clearCookie('ssid', generateCookieParams());
   const dbQuery = 'UPDATE session_log SET isactive = false WHERE ssid = $1';
   const vars = [session];
@@ -129,7 +133,7 @@ function logoutUser(req, res, next) {
 }
 
 function protectPage(req, res, next) {
-  if (!res.locals.authInfo.authenticated) return res.status(400).send('You must be logged in to view this page');
+  if (!res.locals.authInfo.authenticated) return res.json(formatResponse(false, 'You must be logged in to view this page'));
   return next();
 }
 
@@ -139,10 +143,10 @@ function validateUsername(req, res, next) {
   const vars = [username];
   db.query(dbQuery, vars)
     .then(result => {
-      if(!result.rows.length) return res.status(400).send('Username does not exist.')
+      if(!result.rows.length) return res.json(formatResponse(false, 'Username not found'));
       return next();
     })
-    .catch(err => next(err));  
+    .catch(err => next(err));
 }
 
 function createSession(req, res, next) {
