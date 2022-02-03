@@ -45,10 +45,19 @@ module.exports = {
       publicPath: '/dist',
       directory: path.resolve(__dirname, 'dist'),
     },
+<<<<<<< HEAD
+    proxy: { '/api': 'http://localhost:3000', '/assets' : 'http://localhost:3000' }
+  },
+  resolve: {
+    // Enable importing JS / JSX files without specifying their extension
+    extensions: ['.js', '.jsx'],
+  },
+=======
     proxy: { 
       '/api': 'http://localhost:3000', 
       '/auth': 'http://localhost:3000', 
       '/assets' : 'http://localhost:3000' 
     }
   }
+>>>>>>> c76c5de998c8536ee05d0a2a4eea8e1481e9cc98
 }
