@@ -41,6 +41,32 @@ p {
   margin: 5px 0;
 }
 
+.loginForm, .signupForm {
+  display: flex;
+  align-self: center;
+  flex-direction: column;
+  position: absolute;
+  min-width: 200px;
+  min-height: 200px;
+  border: 1px solid rgb(255, 255, 255);
+  box-shadow: 5px 5px 3px rgba(48, 48, 48, 0.788);
+  border-radius: 10px;
+  background-color: rgba(121, 125, 240, 0.986);
+  z-index: 1;
+  top: 50%;
+  left: 70%;
+  padding: 15px;
+}
+
+.loginPopup, .signupPopup {
+  // background-color: blue;
+  // position: fixed;
+  // top: 50%;
+  // left: 50%;
+  // transform: translate(-50%, -50%);
+  // z-index: 1;
+}
+
 #nav {
   width: 100%;
   height: 75px;
@@ -382,7 +408,7 @@ article {
     margin-top: 0;
   }
 
- }
+}
 
 @media screen and (max-width: 500px) {
   #main-container {
@@ -503,3 +529,4 @@ article {
     box-shadow: 0px 2px 2px $shadow;
   }
 }
+

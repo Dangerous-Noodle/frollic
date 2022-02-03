@@ -3,12 +3,12 @@ const axios = require('axios');
 const controller = {};
 
 controller.getResults = (req, res, next) => {
-  console.log(req);
+  // console.log(req);
 
   const radius = Math.round((req.body.radius || 5) * 1609.34);
   const location = (req.body.location || 10109);
   const categories = (req.body.categories || []);
-  console.log(categories);
+  // console.log(categories);
   axios({
     method: 'GET',
     url: 'https://api.yelp.com/v3/businesses/search',
@@ -22,7 +22,7 @@ controller.getResults = (req, res, next) => {
     headers: {
       // 'Content-Type': 'application/json',
       // 'Connection' : 'keep-alive',
-      'Authorization' : 'Bearer IakT1zxbuhim-hMdKiFuMdJK9DrIgeme1h1oHr_XvH1ouoE19GTOgYiLjAJx4nj0-TtSkFmrpI9hcoOSbQFVfZcMJRmyFh0sJoeAia8g_hGjJvUhOy7GO2Ijsov0YXYx',
+      'Authorization' : 'Bearer kDH3a4z30wEffzgX0iyn8OTTyqvuVU4zUw9vPFzfFi9p8pFJxtEeyWyoDH1hYi2jpNNUnYmhrtu1OrwI1Q_mOMZwQbTY95bKtm8IN-xynKO82AHLjd_CS2fjfdr5YXYx',
     },
   })
   .then((response) => {

@@ -11,6 +11,9 @@ const mapDispatchToProps = (dispatch) => ({
 const Sidebar = (props) => {
   const handleClick = (e) => {
     e.preventDefault();
+    
+    //possibly refactor?
+    //run a test and console log to better understand
     const location = document.querySelector('input[name="location"]').value;
     const radius = document.querySelector('select[name="radius"]').value;
     const checkboxes = document.querySelectorAll('input[type=checkbox]:checked');

@@ -7,6 +7,12 @@ const initialState = {
   favsPageOn: false,
   firstRender: true,
   comments: [],
+  username: '',
+  password: '',
+  loggedIn: false,
+  loginState: true,
+  signupState: false,
+  usernameExists: false,
 };
 
 const mainReducer = (state = initialState, action) => {
@@ -20,6 +26,7 @@ const mainReducer = (state = initialState, action) => {
         searchResults: action.payload,
       }
     case types.ADD_FAV:
+      // doing a deep copy using the slice method
       const newFavs = state.favorites.slice();
 
       if (!state.favorites.includes(action.payload)) newFavs.push(action.payload);
@@ -56,7 +63,33 @@ const mainReducer = (state = initialState, action) => {
       return {
         ...state,
       }
-    default:
+    case types.TOGGLE_LOGIN:
+      if (!state.loginState) {
+      return {
+        ...state,
+        loginState: true,
+      }
+    }
+      return {
+        ...state,
+        loginState: false,
+      }
+
+    case types.VALIDATE_USERNAME:
+      // Assuming response object from POST request is in the form of {userExists: true}
+      console.log('USERNAME EXISTS:', action.payload)
+      return {
+        ...state,
+        usernameExists: action.payload,
+      }
+    case types.USER_LOGIN:
+      // Assuming response object from POST request is in the form of {userExists: true}
+      console.log('USER HAS LOGGED ON: ', action.payload)
+      return {
+        ...state,
+        usernameExists: action.payload,
+      }
+      default:
       return state;
   }
 };
