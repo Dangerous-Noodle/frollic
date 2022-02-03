@@ -107,6 +107,8 @@ const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         loggedIn: true,
+        authState: true,
+        loginError: action.payload.message,
       }
     case types.USER_SIGNUP:
       // Assuming response object from POST request is in the form of {userExists: true}
