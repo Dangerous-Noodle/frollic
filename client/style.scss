@@ -41,30 +41,62 @@ p {
   margin: 5px 0;
 }
 
+.loginPopup, .signupPopup {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  min-width: 100vw;
+
+  .transparentBg{
+    position: absolute;
+    min-width: 100vw;
+    min-height: 100vh;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.425);
+    top: 0;
+    float: left;
+  }
+}
+
 .loginForm, .signupForm {
   display: flex;
   align-self: center;
   flex-direction: column;
   position: absolute;
-  min-width: 200px;
+  // min-width: 200px;
+  width: 220px;
   min-height: 200px;
   border: 1px solid rgb(255, 255, 255);
   box-shadow: 5px 5px 3px rgba(48, 48, 48, 0.788);
   border-radius: 10px;
-  background-color: rgba(121, 125, 240, 0.986);
-  z-index: 1;
-  top: 50%;
-  left: 70%;
+  background-color: rgba(126, 225, 195, 0.986);
+  z-index: 2;
+  top: 75px;
+  right: 75px;
   padding: 15px;
+
+  .loginText, .signupText {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .loginButton, .signupButton {
+    width: 100%;
+    padding: 12px 10px;
+    margin: 5px 0 10px;
+    border: 1px solid $black;
+    color: $black;
+    border-radius: 5px;
+    font-size: 14px;
+  }
 }
 
-.loginPopup, .signupPopup {
-  // background-color: blue;
-  // position: fixed;
-  // top: 50%;
-  // left: 50%;
-  // transform: translate(-50%, -50%);
-  // z-index: 1;
+
+#profile-container {
+  z-index: 3;
 }
 
 #nav {
@@ -136,14 +168,13 @@ aside {
   margin-bottom: 10px;
 }
 
-input[type=text], select[name=radius] {
+input[type=text], select[name=radius], input[type=password] {
   width: 90%;
   padding: 12px 10px;
   margin: 10px 0 20px;
   border: 1px solid $black;
   color: $black;
   border-radius: 5px;
-  color: $black;
   font-size: 14px;
 }
 

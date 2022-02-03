@@ -5,15 +5,20 @@ const Signup = (props) =>{
   const passwordText = React.createRef();
   
   return (
-    <div className = 'signupPopup'>
-      <form className = 'signupForm' onSubmit = {(e)=> {
+    <div className='signupPopup'>
+      <div className='transparentBg'></div>
+      <form className='signupForm' onSubmit = {(e)=> {
           e.preventDefault();
-          props.signupUser(username.current.value, password.current.value)
+          props.signupUser(usernameText.current.value, passwordText.current.value);
           }}>
-        <div className = 'SignupText'>Signup</div>
+        <div className='signupText'>Signup</div>
         <input ref={usernameText} type='text' placeholder='username'></input>
-        <input ref={passwordText} type='password' placeholder='password'></input>
-        <button type='submit' className='SignupButton'>Signup</button>
+        <input ref={passwordText} type='text' placeholder='password'></input>
+        <div className='error'>{props.signupError}</div>
+        <button type='submit' className='signupButton'>Signup</button>
+        <div className='loginLink' onClick={props.clickAction}>
+          Login to Account
+        </div>
       </form>
     </div>
   );

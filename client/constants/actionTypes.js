@@ -7,3 +7,4 @@ export const VALIDATE_USERNAME = 'VALIDATE_USERNAME';
 export const USER_LOGIN = 'USER_LOGIN';
 export const USER_SIGNUP = 'USER_SIGNUP';
 export const TOGGLE_LOGIN = 'TOGGLE_LOGIN';
+export const TOGGLE_AUTH = 'TOGGLE_AUTH';
