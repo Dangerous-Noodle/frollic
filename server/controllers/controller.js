@@ -1,32 +1,28 @@
 const axios = require('axios');
+const YELP_KEY = 'Bearer kDH3a4z30wEffzgX0iyn8OTTyqvuVU4zUw9vPFzfFi9p8pFJxtEeyWyoDH1hYi2jpNNUnYmhrtu1OrwI1Q_mOMZwQbTY95bKtm8IN-xynKO82AHLjd_CS2fjfdr5YXYx';
 
 const controller = {};
 
 controller.getResults = (req, res, next) => {
-  // console.log(req);
 
-  const radius = Math.round((req.body.radius || 5) * 1609.34);
-  const location = (req.body.location || 10109);
-  const categories = (req.body.categories || []);
-  // console.log(categories);
+  const radius = Math.round((req.body.radius || 5) * 1600);
+  const location = req.body.location || 10109;
+  const categories = req.body.categories || [];
+
   axios({
     method: 'GET',
     url: 'https://api.yelp.com/v3/businesses/search',
-    // data: {},
     params: {
       'attributes' : 'wheelchair_accessible',
       'radius': radius,
       'location': location,
       'categories': categories,
     },
-    headers: {
-      // 'Content-Type': 'application/json',
-      // 'Connection' : 'keep-alive',
-      'Authorization' : 'Bearer kDH3a4z30wEffzgX0iyn8OTTyqvuVU4zUw9vPFzfFi9p8pFJxtEeyWyoDH1hYi2jpNNUnYmhrtu1OrwI1Q_mOMZwQbTY95bKtm8IN-xynKO82AHLjd_CS2fjfdr5YXYx',
-    },
+    headers: { 'Authorization' : YELP_KEY },
   })
-  .then((response) => {
-    res.locals = response.data.businesses.map((business) => ({
+  .then(response => {
+    const data = response.data.businesses.map(business => {
+      return {
         name : business.name,
         image : business.image_url,
         url : business.url,
@@ -35,13 +31,13 @@ controller.getResults = (req, res, next) => {
         rating : business.rating,
         price : business.price,
         distance :`${Math.round(business.distance * .00062137 * 100) / 100} mi`
-    }));
+      };
+    });
+    res.locals.searchResults = data;
+    return next();
+
   })
-  .then(() => { next(); })
-  .catch((err) => next({
-      log: `Error in getResults controller: ${err}`,
-      message: { err: 'See log for error details'},
-  }));
+  .catch(err => next(err));
 }
 
 

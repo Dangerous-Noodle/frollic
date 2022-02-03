@@ -1,26 +1,18 @@
 const uuid = require('uuid');
 const bcrypt = require('bcrypt');
 const db = require('../models/dbModel');
+const createResponse = require('../models/responseModel');
 
-
-function generateCookieParams() {
+function genCookieParams() {
   const ONE_MONTH = 1000 * 60 * 60 * 24 * 30;
   return { maxAge: ONE_MONTH, httpOnly: true, path: '/' };
 }
-
-function formatResponse(success, message)  {
-  return { success, message };
-}
-
-
-// req.body.auth.authAction
-// req.body.auth.username
-// req.body.auth.password
 
 // Place this in app.use so it is used globally
 function globalAuthMiddleware(req, res, next) {
 
   // set default values for res.locals.authInfo object
+  // authInfo object model
   res.locals.authInfo = { 
     authenticated: false,
     ssid: null,
@@ -29,7 +21,7 @@ function globalAuthMiddleware(req, res, next) {
     message: 'No SSID cookie found'
   };
 
-  // check for ssid cookie presence
+  // if there is no ssid cookie or falsy value
   if (!req.cookies.ssid) return next();
 
   const unverifiedSsid = req.cookies.ssid;
@@ -63,10 +55,9 @@ function signupUser(req, res, next) {
 
   // validate body of request
 
-  if (!req.body.auth) return res.json(formatResponse(false, 'Bad request: please specify username and password'));
-
+  if (!req.body.auth) return res.status(400).json(createResponse(false, 400, 'Error: please specify username and password'));
   const { username, password } = req.body.auth;
-  if (!username || !password) return res.json(formatResponse(false, 'Bad request: please specify username and password'));
+  if (!username || !password) return res.status(400).json(createResponse(false, 400, 'Error: please specify username and password'));
 
 
   bcrypt.hash(password, 10)
@@ -81,6 +72,7 @@ function signupUser(req, res, next) {
     return db.query(createUserQuery, vars);
   })
   .then(result => {
+    // createSession object template
     res.locals.createSession = {
       userId: result.rows[0]._id,
       username: result.rows[0].username,
@@ -89,23 +81,22 @@ function signupUser(req, res, next) {
   })
   .catch(err => {
     if (err.constraint === 'users_username_key') {
-      return res.json(formatResponse(false, 'Error: username already exists in database'));
+      return res.status(400).json(createResponse(false, 400, 'Error: user already exists'));
     }
     return next(err);
   })
 }
 
 function loginUser(req, res, next) {
-  if (!req.body.auth) return res.json(formatResponse(false, 'Bad request: please specify username and password'));
-
+  if (!req.body.auth) return res.status(400).json(createResponse(false, 400, 'Error: please specify username and password'));
   const { username, password } = req.body.auth;
-  if (!username || !password) return res.json(formatResponse(false, 'Bad request: please specify username and password'));
+  if (!username || !password) return res.status(400).json(createResponse(false, 400, 'Error: please specify username and password'));
 
   const dbQuery = 'SELECT _id, pwd FROM users WHERE username = $1';
   const vars = [username];
   db.query(dbQuery, vars)
     .then(result => {
-      if (!result.rows.length) return res.json(formatResponse(false, 'Error: incorrect username and/or password'));
+      if (!result.rows.length) return res.status(400).json(createResponse(false, 400, 'Error: incorrect username and/or password'));
       const { _id, pwd } = result.rows[0];
       res.locals.createSession = {
         userId: _id,
@@ -115,16 +106,17 @@ function loginUser(req, res, next) {
     })
     .then(result => {
       if (!result) {
-        return res.json(formatResponse(false, 'Error: incorrect username and/or password'));
+        return res.status(400).json(createResponse(false, 400, 'Error: incorrect username and/or password'));
       } 
       return next();
     })
+    .catch(err => next(err));
 }
 
 function logoutUser(req, res, next) {
   const session = req.cookies.ssid;
-  if (!session) return res.json(formatResponse(false, 'You are not logged in'));
-  res.clearCookie('ssid', generateCookieParams());
+  if (!session) return res.status(400).json(createResponse(false, 400, 'Error: you are not logged in'));
+  res.clearCookie('ssid', genCookieParams());
   const dbQuery = 'UPDATE session_log SET isactive = false WHERE ssid = $1';
   const vars = [session];
   db.query(dbQuery, vars)
@@ -133,7 +125,7 @@ function logoutUser(req, res, next) {
 }
 
 function protectPage(req, res, next) {
-  if (!res.locals.authInfo.authenticated) return res.json(formatResponse(false, 'You must be logged in to view this page'));
+  if (!res.locals.authInfo.authenticated) return res.status(400).json(createResponse(false, 400, 'Error: you must be logged in to view this content'));
   return next();
 }
 
@@ -143,7 +135,7 @@ function validateUsername(req, res, next) {
   const vars = [username];
   db.query(dbQuery, vars)
     .then(result => {
-      if(!result.rows.length) return res.json(formatResponse(false, 'Username not found'));
+      if(!result.rows.length) return res.status(400).json(createResponse(false, 400, 'Username not found'));
       return next();
     })
     .catch(err => next(err));
@@ -151,15 +143,13 @@ function validateUsername(req, res, next) {
 
 function createSession(req, res, next) {
   const { userId, username } = res.locals.createSession;
-  const createSessionQuery = `
-    INSERT INTO session_log (user_id, ssid)
-    VALUES ($1, $2);
-    `;
+  const createSessionQuery = `INSERT INTO session_log (user_id, ssid) VALUES ($1, $2);`;
   const ssid = uuid.v4();
   const vars = [userId, ssid];
   db.query(createSessionQuery, vars)
   .then(result => {
-    res.cookie('ssid', ssid, generateCookieParams());
+    res.cookie('ssid', ssid, genCookieParams());
+    // update authInfo object
     res.locals.authInfo = { 
       authenticated: true,
       ssid: ssid,

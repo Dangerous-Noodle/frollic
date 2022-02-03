@@ -10,9 +10,12 @@ const initialState = {
   username: '',
   password: '',
   loggedIn: false,
+  authState: true,
   loginState: true,
   signupState: false,
   usernameExists: false,
+  signupError: '',
+  loginError: '',
 };
 
 const mainReducer = (state = initialState, action) => {
@@ -74,7 +77,17 @@ const mainReducer = (state = initialState, action) => {
         ...state,
         loginState: false,
       }
-
+      case types.TOGGLE_AUTH:
+        if (!state.authState) {
+        return {
+          ...state,
+          authState: true,
+        }
+      }
+        return {
+          ...state,
+          authState: false,
+        }
     case types.VALIDATE_USERNAME:
       // Assuming response object from POST request is in the form of {userExists: true}
       console.log('USERNAME EXISTS:', action.payload)
@@ -85,12 +98,30 @@ const mainReducer = (state = initialState, action) => {
     case types.USER_LOGIN:
       // Assuming response object from POST request is in the form of {userExists: true}
       console.log('USER HAS LOGGED ON: ', action.payload)
+      if (!action.payload.actionSuccess){
+        return {
+          ...state,
+          loginError: action.payload.message
+        }
+      }
       return {
         ...state,
-        usernameExists: action.payload,
+        loggedIn: true,
       }
-      default:
-      return state;
+    case types.USER_SIGNUP:
+      // Assuming response object from POST request is in the form of {userExists: true}
+      console.log('USER HAS SIGNED UP: ', action.payload)
+      if (!action.payload.actionSuccess){
+        return {
+          ...state,
+          signupError: action.payload.message
+        }
+      }
+      return {
+        ...state,
+      }
+    default:
+    return state;
   }
 };
 

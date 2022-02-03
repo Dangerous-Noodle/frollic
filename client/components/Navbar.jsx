@@ -7,9 +7,12 @@ import Login from './Login.jsx';
 import Signup from './Signup.jsx';
 
 const mapStateToProps = (state) => ({
+  authState: state.search.authState,
   loggedIn: state.search.loggedIn,
   loginState: state.search.loginState,
   usernameExists: state.search.usernameExists,
+  signupError: state.search.signupError,
+  loginError: state.search.loginError,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -18,6 +21,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     toggleLogin: () => {
       dispatch(actions.toggleLogin());
+    },
+    toggleAuth: () => {
+      dispatch(actions.toggleAuth());
     },
     loginUser: (username, password) => {
       dispatch(actions.userLogin(username, password));
@@ -31,8 +37,18 @@ const Navbar = (props) => {
   return (
     <div id="nav">
       <a href="/"><img id="logo" alt="frollic-logo" src="/assets/logo.png"></img></a>
-      {props.loggedIn ? null : props.loginState ? <Login loginUser={props.loginUser}/> : <Signup signupUser={props.signupUser} usernameExists={props.usernameExists}/>}
-      <ProfileIcon clickAction={props.loggedIn ? props.toggleFavesPage : props.toggleLogin} />
+      {props.authState ? null : props.loginState ? 
+      <Login 
+        loginUser={props.loginUser} 
+        loginError={props.loginError} 
+        clickAction={props.toggleLogin}/> : 
+      <Signup 
+        signupUser={props.signupUser} 
+        usernameExists={props.usernameExists}
+        signupError={props.signupError} 
+        clickAction={props.toggleLogin}/>}
+      <ProfileIcon clickAction={props.toggleAuth} />
+      {/* <ProfileIcon clickAction={props.loggedIn ? props.toggleFavesPage : props.toggleAuth} /> */}
     </div>
   )
 }

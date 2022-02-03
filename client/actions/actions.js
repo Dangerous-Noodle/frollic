@@ -44,6 +44,10 @@ export const toggleLogin = () => ({
   type: types.TOGGLE_LOGIN,
 });
 
+export const toggleAuth = () => ({
+  type: types.TOGGLE_AUTH,
+});
+
 export const validateUsername = (username) => (dispatch) => {
   
   axios({
@@ -77,6 +81,7 @@ export const userLogin = (username, password) => (dispatch) => {
     }
   })
   .then((response) => {
+    console.log('LOGIN RESPONSE:', response.data)
     dispatch({
       type: types.USER_LOGIN,
       // determine response from backend using status code
