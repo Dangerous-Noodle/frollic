@@ -1,7 +1,7 @@
 const uuid = require('uuid');
 const bcrypt = require('bcrypt');
 const db = require('../models/dbModel');
-const createResponse = require('../models/responseModel');
+const { createResponse } = require('../models/responseModel');
 
 function genCookieParams() {
   const ONE_MONTH = 1000 * 60 * 60 * 24 * 30;
@@ -10,6 +10,8 @@ function genCookieParams() {
 
 // Place this in app.use so it is used globally
 function globalAuthMiddleware(req, res, next) {
+
+  console.log('inside global auth middleware')
 
   // set default values for res.locals.authInfo object
   // authInfo object model
@@ -25,6 +27,7 @@ function globalAuthMiddleware(req, res, next) {
   if (!req.cookies.ssid) return next();
 
   const unverifiedSsid = req.cookies.ssid;
+  if (!uuid.validate(unverifiedSsid)) return next();
   // check ssid against the database table session_log
   const queryString = `
     SELECT l.user_id, u.username, l.ssid
@@ -39,15 +42,20 @@ function globalAuthMiddleware(req, res, next) {
   
   db.query(queryString, input)
     .then(data => {
+      console.log(data.rows);
       if (!data.rows.length) {
         res.locals.authInfo.message = 'Invalid SSID cookie';
         return next();
       } 
       const { user_id, username, ssid } = data.rows[0];
       res.locals.authInfo = { authenticated: true, user_id, username, ssid, message: 'Success' };
+      console.log('about to call next');
       return next();
     })
-    .catch(err => next(err));
+    .catch(err => {
+      console.log('error querying db in global auth middleware')
+      return next(err);
+    } );
 }
 
 
@@ -76,6 +84,7 @@ function signupUser(req, res, next) {
     res.locals.createSession = {
       userId: result.rows[0]._id,
       username: result.rows[0].username,
+      valid: true
     };
     return next();
   })
@@ -105,10 +114,13 @@ function loginUser(req, res, next) {
       return bcrypt.compare(password, pwd);
     })
     .then(result => {
-      if (!result) {
+      if (typeof result !== 'boolean') return;
+      if (result === false) {
         return res.status(400).json(createResponse(false, 400, 'Error: incorrect username and/or password'));
-      } 
-      return next();
+      } else {
+        res.locals.createSession.valid = true;
+        return next();
+      }
     })
     .catch(err => next(err));
 }
@@ -136,12 +148,16 @@ function validateUsername(req, res, next) {
   db.query(dbQuery, vars)
     .then(result => {
       if(!result.rows.length) return res.status(400).json(createResponse(false, 400, 'Username not found'));
-      return next();
+      else return next();
     })
     .catch(err => next(err));
 }
 
 function createSession(req, res, next) {
+  if (!res.locals.createSession || !res.locals.createSession.valid) {
+    console.log('Error: Cannot create session');
+    return next(err);
+  }
   const { userId, username } = res.locals.createSession;
   const createSessionQuery = `INSERT INTO session_log (user_id, ssid) VALUES ($1, $2);`;
   const ssid = uuid.v4();

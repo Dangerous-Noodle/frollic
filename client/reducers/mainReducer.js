@@ -38,6 +38,11 @@ const mainReducer = (state = initialState, action) => {
         ...state,
         favorites: newFavs,
       }
+    case types.GET_FAV:
+      return {
+        ...state,
+        favorites: action.payload,
+      }
     case types.TOGGLE_FAVS_PAGE:
       if (!state.favsPageOn) {
 
@@ -110,6 +115,12 @@ const mainReducer = (state = initialState, action) => {
         authState: true,
         loginError: action.payload.message,
       }
+    case types.USER_LOGOUT:
+      console.log('USER HAS LOGGED OUT', action.payload)
+      return {
+        ...state,
+        loggedIn: false,
+      }
     case types.USER_SIGNUP:
       // Assuming response object from POST request is in the form of {userExists: true}
       console.log('USER HAS SIGNED UP: ', action.payload)
@@ -121,6 +132,8 @@ const mainReducer = (state = initialState, action) => {
       }
       return {
         ...state,
+        signupError: action.payload.message,
+        loginState: true,
       }
     default:
     return state;

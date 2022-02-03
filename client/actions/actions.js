@@ -1,8 +1,7 @@
 import * as types from '../constants/actionTypes';
 import axios from 'axios';
 
-export const getResults = (location, radius, categories) => (dispatch) => {
-  
+export const getResults = (location, radius, categories, attributes) => (dispatch) => {
   
   axios({
     method: 'POST',
@@ -12,9 +11,11 @@ export const getResults = (location, radius, categories) => (dispatch) => {
       location: location,
       radius: radius,
       categories: categories,
+      attributes: attributes,
     }
   })
   .then((response) => {
+      console.log(response.data)
     dispatch({
       type: types.GET_RESULTS,
       payload: response.data,
@@ -22,10 +23,43 @@ export const getResults = (location, radius, categories) => (dispatch) => {
   });
 };
 
-export const addFav = (favorite) => ({
-  type: types.ADD_FAV,
-  payload: favorite,
-});
+export const addFav = (businessID) => (dispatch) => {
+  // modify to send favorite request to database
+  console.log('ADDING TO FAVORITES, BUSINESS ID: ', businessID)
+  axios({
+    method: 'POST',
+    // sync endpoint with backend
+    url: `/api/addfavorite`,
+    headers: { 'Content-Type': 'application/JSON' },
+    // what type of data to send
+    data: {businessId: businessID}
+  })
+  .then((response) => {
+    console.log('ADDED TO FAVORITES:', response.data)
+    dispatch({
+      type: types.ADD_FAV,
+      payload: response.data,
+    });
+  });
+};
+
+export const getFav = () => (dispatch) => {
+  // modify to send favorite request to database
+  console.log('RETRIEVING FAVORITES')
+  axios({
+    method: 'GET',
+    // sync endpoint with backend
+    url: `/api/getfavorites`,
+    headers: { 'Content-Type': 'application/JSON' },
+  })
+  .then((response) => {
+    console.log('RETRIEVING FAVORITES:', response.data)
+    dispatch({
+      type: types.GET_FAV,
+      payload: response.data,
+    });
+  });
+};
 
 export const toggleFavsPage = () => ({
   type: types.TOGGLE_FAVS_PAGE,
@@ -88,6 +122,21 @@ export const userLogin = (username, password) => (dispatch) => {
       payload: response.data,
     });
   });
+};
+
+export const userLogout = () => (dispatch) => {
+  axios({
+    method:'POST',
+    url: `/auth/logout`,
+    headers: { 'Content-Type': 'application/JSON' },
+    data: {}
+  })
+  .then((response) => {
+    dispatch({
+      type: types.USER_LOGOUT,
+      payload: response.data
+    })
+  })
 };
 
 export const userSignup = (username, password) => (dispatch) => {

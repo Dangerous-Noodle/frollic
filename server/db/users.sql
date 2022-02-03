@@ -18,7 +18,7 @@ CREATE TABLE session_log (
 CREATE TABLE favorites (
   _id SERIAL PRIMARY KEY NOT NULL,
   user_id BIGINT REFERENCES users (_id),
-  places_id BIGINT REFERENCES places (_id)
+  places_id VARCHAR(500) NOT NULL
 );
 
 CREATE TABLE comments (
@@ -27,10 +27,5 @@ CREATE TABLE comments (
   places_id BIGINT REFERENCES places (_id),
   content VARCHAR(1000) NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE places (
-  _id SERIAL PRIMARY KEY NOT NULL,
-  places_id VARCHAR(500) NOT NULL
 );
 
