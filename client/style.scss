@@ -1,5 +1,5 @@
-$teal: #22B3A6;
-$gold: #f0c25f;
+$teal: #4fcaf0;
+$gold: #fde454;
 $white: #FFFCF5;
 $gray: #D0D7DD;
 $black: #2A343A;
@@ -39,6 +39,65 @@ h2 {
 p {
   color: $black;
   margin: 5px 0;
+}
+
+.loginPopup, .signupPopup {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  min-width: 100vw;
+
+  .transparentBg{
+    position: absolute;
+    min-width: 100vw;
+    min-height: 100vh;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.425);
+    top: 0;
+    float: left;
+  }
+}
+
+.loginForm, .signupForm {
+  display: flex;
+  align-self: center;
+  flex-direction: column;
+  position: absolute;
+  // min-width: 200px;
+  width: 220px;
+  min-height: 200px;
+  border: 1px solid #fde454;;
+  box-shadow: 5px 5px 3px rgba(48, 48, 48, 0.788);
+  border-radius: 10px;
+  background-color:#4fcaf0;
+  z-index: 2;
+  top: 75px;
+  right: 75px;
+  padding: 15px;
+
+  .loginText, .signupText {
+    text-align: center;
+    font-size: 24px;
+    color: white;
+    font-weight: bold;
+  }
+
+  .loginButton, .signupButton {
+    width: 100%;
+    padding: 12px 10px;
+    margin: 5px 0 10px;
+    border: 1px solid $black;
+    color: $black;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+}
+
+
+#profile-container {
+  z-index: 3;
 }
 
 #nav {
@@ -99,6 +158,7 @@ aside {
    margin-top: 75px;
    padding: 40px;
    height: 100%;
+   width: 330px;
    background-color:#FFFCF5;
    display: flex;
    align-items: flex-start;
@@ -110,14 +170,13 @@ aside {
   margin-bottom: 10px;
 }
 
-input[type=text], select[name=radius] {
+input[type=text], select[name=radius], input[type=password] {
   width: 90%;
   padding: 12px 10px;
   margin: 10px 0 20px;
   border: 1px solid $black;
   color: $black;
   border-radius: 5px;
-  color: $black;
   font-size: 14px;
 }
 
@@ -141,13 +200,17 @@ input[type=checkbox]{
 
   .checkbox label {
     padding-left: 5px;
-    font-size: 14px;
+    font-size: 10px;
   }
 }
 
 .checkboxes {
   display: grid;
   grid-template-columns: 1fr 1fr;
+}
+
+.access {
+  display: flex;
 }
 
 #search {
@@ -157,7 +220,7 @@ input[type=checkbox]{
   font-size: 16px;
   border: 1px solid $gold;
   border-radius: 5px;
-  width: 100%;
+  width: 50%;
   height: 45px;
   z-index: 1;
   box-shadow: 0px 2px 2px $shadow;
@@ -180,7 +243,7 @@ input[type=checkbox]{
   align-content: center;
   justify-content: center;
   align-items: center;
-  background: url("./assets/background.gif") $gold repeat center;
+  background: url("./assets/background_new.gif") $gold repeat center;
   height: 100vh;
   padding: 40px;
 }
@@ -227,7 +290,7 @@ article {
 
 .addFav {
   background-color: $teal;
-  color:$white;
+  color:black;
   border-radius: 5px;
   border: 1px solid $teal;
   width: 125px;
@@ -257,9 +320,10 @@ article {
   box-shadow: 0px 2px 2px $shadow;
 }
 
+
 .name {
-  color: $teal;
-  font-size: 20px;
+  color: rgb(3, 104, 104);
+  font-size: 16px;
   font-weight: bold;
   text-decoration: none;
 }
@@ -302,9 +366,10 @@ article {
 .add-comment {
   padding: 12px 0 0 1px;
   margin: 0;
-  color: $teal;
+  color: teal;
   align-self: flex-start;
   background: none;
+  font-size: 14px;
   border: none;
 }
 
@@ -382,7 +447,7 @@ article {
     margin-top: 0;
   }
 
- }
+}
 
 @media screen and (max-width: 500px) {
   #main-container {
@@ -472,7 +537,7 @@ article {
   
   .addFav {
     background-color: $teal;
-    color:$white;
+    color:black;
     border-radius: 5px;
     border: 1px solid $teal;
     width: 125px;
@@ -503,3 +568,4 @@ article {
     box-shadow: 0px 2px 2px $shadow;
   }
 }
+

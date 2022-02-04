@@ -45,6 +45,10 @@ module.exports = {
       publicPath: '/dist',
       directory: path.resolve(__dirname, 'dist'),
     },
-    proxy: { '/api': 'http://localhost:3000', '/assets' : 'http://localhost:3000' }
+    proxy: { 
+      '/api': 'http://localhost:3000', 
+      '/auth': 'http://localhost:3000', 
+      '/assets' : 'http://localhost:3000' 
+    }
   }
 }
