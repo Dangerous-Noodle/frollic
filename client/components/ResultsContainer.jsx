@@ -6,11 +6,15 @@ import * as actions from '../actions/actions';
 const mapStateToProps = (state) => ({
   searchResults: state.search.searchResults,
   firstRender: state.search.firstRender,
+  loggedIn: state.search.loggedIn,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  addFav: (favorite) => {
-    dispatch(actions.addFav(favorite));
+  addFav: (businessID) => {
+    dispatch(actions.addFav(businessID));
+  },
+  addFavAndGetFav: (businessID) => {
+    dispatch(actions.addFavAndGetFav(businessID));
   },
   addComment: (comment) => {
     dispatch(actions.addComment(comment));
@@ -35,11 +39,14 @@ const ResultsContainer = (props) => {
 
   const resultCards = props.searchResults.map((resultObj, index) => {
     return <ResultCard
-      addFav={props.addFav}
+      businessID={resultObj.businessID}
+      // addFav={props.addFav}
+      addFavAndGetFav={props.addFavAndGetFav}
       addComment={props.addComment}
       key={index}
       result={resultObj}
       name={resultObj.name}
+      alias={resultObj.alias}
       image={resultObj.image}
       url={resultObj.url}
       address={resultObj.address}
@@ -47,6 +54,7 @@ const ResultsContainer = (props) => {
       rating={resultObj.rating}
       price={resultObj.price}
       distance={resultObj.distance}
+      loggedIn={props.loggedIn}
     />
   });
   

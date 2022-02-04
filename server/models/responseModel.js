@@ -7,14 +7,14 @@ function createResponse(actionSuccess, statusCode = 200, message = '', data = {}
   };
 }
 
-function createError(log, status, message) {
+// function createError(log, status, message) {
 
-  if (!log) log = 'Express error handler caught unknown middleware error';
-  if (!status) status = 500;
-  if (!message) message = { err: 'An error occurred' };
-  else message = { err: message };
+//   if (!log) log = 'Express error handler caught unknown middleware error';
+//   if (!status) status = 500;
+//   if (!message) message = { err: 'An error occurred' };
+//   else message = { err: message };
 
-  return { log, status, message };
-}
+//   return { log, status, message };
+// }
 
-module.exports = { createResponse, createError };
+module.exports = { createResponse };

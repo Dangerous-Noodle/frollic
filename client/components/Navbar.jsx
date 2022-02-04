@@ -2,9 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions/actions';
 import ProfileIcon from './ProfileIcon.jsx';
-// import Logo from './Logo.jsx';
 import Login from './Login.jsx';
 import Signup from './Signup.jsx';
+import Logout from './Logout.jsx';
 
 const mapStateToProps = (state) => ({
   authState: state.search.authState,
@@ -28,9 +28,15 @@ const mapDispatchToProps = (dispatch) => ({
     loginUser: (username, password) => {
       dispatch(actions.userLogin(username, password));
     },
+    logoutUser: () => {
+      dispatch(actions.userLogout());
+    },
     signupUser: (username, password) =>{
       dispatch(actions.userSignup(username, password))
-    }
+    },
+    loginUserAndGetFav: (username, password) =>{
+      dispatch(actions.userLoginAndGetFav(username, password))
+    },
   });
 
 const Navbar = (props) => {
@@ -38,17 +44,20 @@ const Navbar = (props) => {
     <div id="nav">
       <a href="/"><img id="logo" alt="frollic-logo" src="/assets/logo.png"></img></a>
       {props.authState ? null : props.loginState ? 
-      <Login 
-        loginUser={props.loginUser} 
-        loginError={props.loginError} 
-        clickAction={props.toggleLogin}/> : 
-      <Signup 
-        signupUser={props.signupUser} 
-        usernameExists={props.usernameExists}
-        signupError={props.signupError} 
-        clickAction={props.toggleLogin}/>}
-      <ProfileIcon clickAction={props.toggleAuth} />
-      {/* <ProfileIcon clickAction={props.loggedIn ? props.toggleFavesPage : props.toggleAuth} /> */}
+        <Login 
+          // loginUser={props.loginUser} 
+          loginUserAndGetFav={props.loginUserAndGetFav}
+          loginError={props.loginError} 
+          clickAction={props.toggleLogin}/> : 
+        <Signup 
+          signupUser={props.signupUser} 
+          usernameExists={props.usernameExists}
+          signupError={props.signupError} 
+          clickAction={props.toggleLogin}/>}
+      <ProfileIcon clickAction={props.loggedIn ? props.toggleFavsPage : props.toggleAuth} />
+      {props.loggedIn ? 
+        <Logout clickAction={props.logoutUser}/> :
+         null}
     </div>
   )
 }

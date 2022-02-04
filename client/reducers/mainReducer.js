@@ -22,21 +22,21 @@ const mainReducer = (state = initialState, action) => {
 
   switch (action.type) {
     case types.GET_RESULTS:
-
-    return {
+      return {
         ...state,
         firstRender: false,
         searchResults: action.payload,
       }
     case types.ADD_FAV:
       // doing a deep copy using the slice method
-      const newFavs = state.favorites.slice();
-
-      if (!state.favorites.includes(action.payload)) newFavs.push(action.payload);
-      
       return {
         ...state,
-        favorites: newFavs,
+      }
+    case types.GET_FAV:
+      console.log('RETRIEVING FAVORITES')
+      return {
+        ...state,
+        favorites: action.payload.data,
       }
     case types.TOGGLE_FAVS_PAGE:
       if (!state.favsPageOn) {
@@ -107,6 +107,14 @@ const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         loggedIn: true,
+        authState: true,
+        loginError: action.payload.message,
+      }
+    case types.USER_LOGOUT:
+      console.log('USER HAS LOGGED OUT', action.payload)
+      return {
+        ...state,
+        loggedIn: false,
       }
     case types.USER_SIGNUP:
       // Assuming response object from POST request is in the form of {userExists: true}
@@ -119,6 +127,8 @@ const mainReducer = (state = initialState, action) => {
       }
       return {
         ...state,
+        signupError: action.payload.message,
+        loginState: true,
       }
     default:
     return state;
