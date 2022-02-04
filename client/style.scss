@@ -1,5 +1,5 @@
-$teal: #22B3A6;
-$gold: #f0c25f;
+$teal: #4fcaf0;
+$gold: #fde454;
 $white: #FFFCF5;
 $gray: #D0D7DD;
 $black: #2A343A;
@@ -68,10 +68,10 @@ p {
   // min-width: 200px;
   width: 220px;
   min-height: 200px;
-  border: 1px solid rgb(255, 255, 255);
+  border: 1px solid #fde454;;
   box-shadow: 5px 5px 3px rgba(48, 48, 48, 0.788);
   border-radius: 10px;
-  background-color: rgba(126, 225, 195, 0.986);
+  background-color:#4fcaf0;
   z-index: 2;
   top: 75px;
   right: 75px;
@@ -80,6 +80,7 @@ p {
   .loginText, .signupText {
     text-align: center;
     font-size: 24px;
+    color: white;
     font-weight: bold;
   }
 
@@ -157,6 +158,7 @@ aside {
    margin-top: 75px;
    padding: 40px;
    height: 100%;
+   width: 330px;
    background-color:#FFFCF5;
    display: flex;
    align-items: flex-start;
@@ -207,6 +209,10 @@ input[type=checkbox]{
   grid-template-columns: 1fr 1fr;
 }
 
+.access {
+  display: flex;
+}
+
 #search {
   background-color: $gold;
   color: $black;
@@ -237,7 +243,7 @@ input[type=checkbox]{
   align-content: center;
   justify-content: center;
   align-items: center;
-  background: url("./assets/background.gif") $gold repeat center;
+  background: url("./assets/background_new.gif") $gold repeat center;
   height: 100vh;
   padding: 40px;
 }
@@ -284,7 +290,7 @@ article {
 
 .addFav {
   background-color: $teal;
-  color:$white;
+  color:black;
   border-radius: 5px;
   border: 1px solid $teal;
   width: 125px;
@@ -531,7 +537,7 @@ article {
   
   .addFav {
     background-color: $teal;
-    color:$white;
+    color:black;
     border-radius: 5px;
     border: 1px solid $teal;
     width: 125px;

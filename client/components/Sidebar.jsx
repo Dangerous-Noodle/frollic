@@ -34,22 +34,23 @@ const Sidebar = (props) => {
     <aside>
       <form>
         <div className="location-and-radius">
-        <div className="form-element">
-        <label htmlFor="location" className="side-header">Your Address or Zipcode 
-          <input type="text" name="location" placeholder="eg. 123 Main Street, New York, NY, 10036 or 90210" id = "location"></input>
-        </label><br/>
-        </div>
+          <div className="form-element">
+            <label htmlFor="location" className="side-header">Your Address or Zipcode 
+              <input type="text" name="location" placeholder="eg. 123 Main Street, New York, NY, 10036 or 90210" id = "location"></input>
+            </label><br/>
+          </div>
         
-        <div className="form-element">
-        <label htmlFor="radius" className="side-header">Search Radius 
-        <select name="radius" id ='radius'>
-          <option value=".5" selected >less than 1 mile</option>
-          <option value="1">1 mile</option>
-          <option value="5">5 miles</option>
-          <option value="10">10 miles</option>
-          <option value="25">25 miles</option>
-        </select></label><br/>
-        </div>
+          <div className="form-element">
+            <label htmlFor="radius" className="side-header">Search Radius 
+              <select name="radius" id ='radius'>
+                <option value=".5" selected >less than 1 mile</option>
+                <option value="1">1 mile</option>
+                <option value="5">5 miles</option>
+                <option value="10">10 miles</option>
+                <option value="25">25 miles</option>
+              </select>
+            </label><br/>
+          </div>
         </div>
 
         <div className="filters">
@@ -109,9 +110,9 @@ const Sidebar = (props) => {
           <div className="checkboxes">
 
             <div className="checkbox">
-              <label htmlFor="Gender Neutral">
+              <label className="access" htmlFor="Gender Neutral">
               <input className="accessibility" type="checkbox" name="gender_neutral_restrooms" id="Gender Neutral"></input>
-              Gender Neutral Restrooms</label><br/>
+              <div>Gender Neutral<br/> Restrooms</div></label><br/>
             </div>
 
             <div className="checkbox">
@@ -121,9 +122,9 @@ const Sidebar = (props) => {
             </div>
 
             <div className="checkbox">
-              <label htmlFor="Wheelchair Accessible">
+              <label className="access" htmlFor="Wheelchair Accessible">
               <input className="accessibility" type="checkbox" name="wheelchair_accessible" id="Wheelchair Accessible"></input>
-               Wheelchair Accessible</label><br/>
+              <div>Wheelchair<br/> Accessible</div></label><br/>
             </div>
           
             <div className="checkbox">
