@@ -13,6 +13,9 @@ const mapDispatchToProps = (dispatch) => ({
   addFav: (businessID) => {
     dispatch(actions.addFav(businessID));
   },
+  addFavAndGetFav: (businessID) => {
+    dispatch(actions.addFavAndGetFav(businessID));
+  },
   addComment: (comment) => {
     dispatch(actions.addComment(comment));
   }
@@ -37,11 +40,13 @@ const ResultsContainer = (props) => {
   const resultCards = props.searchResults.map((resultObj, index) => {
     return <ResultCard
       businessID={resultObj.businessID}
-      addFav={props.addFav}
+      // addFav={props.addFav}
+      addFavAndGetFav={props.addFavAndGetFav}
       addComment={props.addComment}
       key={index}
       result={resultObj}
       name={resultObj.name}
+      alias={resultObj.alias}
       image={resultObj.image}
       url={resultObj.url}
       address={resultObj.address}

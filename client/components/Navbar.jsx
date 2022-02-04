@@ -33,7 +33,10 @@ const mapDispatchToProps = (dispatch) => ({
     },
     signupUser: (username, password) =>{
       dispatch(actions.userSignup(username, password))
-    }
+    },
+    loginUserAndGetFav: (username, password) =>{
+      dispatch(actions.userLoginAndGetFav(username, password))
+    },
   });
 
 const Navbar = (props) => {
@@ -42,7 +45,8 @@ const Navbar = (props) => {
       <a href="/"><img id="logo" alt="frollic-logo" src="/assets/logo.png"></img></a>
       {props.authState ? null : props.loginState ? 
         <Login 
-          loginUser={props.loginUser} 
+          // loginUser={props.loginUser} 
+          loginUserAndGetFav={props.loginUserAndGetFav}
           loginError={props.loginError} 
           clickAction={props.toggleLogin}/> : 
         <Signup 

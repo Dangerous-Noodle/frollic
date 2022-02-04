@@ -44,9 +44,12 @@ controller.getResults = (req, res, next) => {
   .catch(err => next(err));
 }
 
+// const test = false;
+// const fakeRes = {locals: {}};
+// const fakeNext = () => console.log(fakeRes.locals.userFavorites[0]);
 controller.getBusinessInfo = (req, res, next) => {
-
-  let favorites = res.locals.userFavorites;
+  let favorites;
+  favorites = res.locals.userFavorites;
   favorites = favorites.map(el => 
     axios({
       method: 'GET',
@@ -54,7 +57,8 @@ controller.getBusinessInfo = (req, res, next) => {
       headers: { 'Authorization' : YELP_KEY },
     })
     .then(response => {
-      const { id, name, alias, image_url, url, review_count, location, phone, rating, price, coordinates, distance } = response;
+      console.log('response is', response);
+      const { id, name, alias, image_url, url, review_count, location, phone, rating, price, coordinates, distance } = response.data;
       return {
         businessID : id,
         name : name,
@@ -67,10 +71,10 @@ controller.getBusinessInfo = (req, res, next) => {
         rating : rating,
         price : price,
         coordinates: coordinates,
-        distance :`${Math.round(distance / 1000 / 1.6 * 100) / 100} mi`
+        distance :`N/A`
       };
     })
-    .catch(err => next(err))
+    .catch(err => null)
   );
   Promise.all(favorites)
     .then(result => {
@@ -79,5 +83,7 @@ controller.getBusinessInfo = (req, res, next) => {
     })
     .catch(err => next(err));
 }
+
+//console.log(controller.getBusinessInfo(fakeRes, fakeRes, fakeNext));
 
 module.exports = controller;

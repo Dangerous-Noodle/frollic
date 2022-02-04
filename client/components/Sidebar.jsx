@@ -27,11 +27,7 @@ const Sidebar = (props) => {
     accessible.forEach((el)=> attributes += ',' + el.name);
     attributes = attributes.slice(1);
 
-    console.log(categories);
-    console.log(attributes);
-
     props.getResults(location, radius, categories, attributes);
-
   }
   //  onSubmit={() => {return false}}
   return (
@@ -40,7 +36,7 @@ const Sidebar = (props) => {
         <div className="location-and-radius">
         <div className="form-element">
         <label htmlFor="location" className="side-header">Your Address or Zipcode 
-          <input type="text" name="location" placeholder="eg. 123 Main Street, New York, NY, 10036 or 90210"></input>
+          <input type="text" name="location" placeholder="eg. 123 Main Street, New York, NY, 10036 or 90210" id = "location"></input>
         </label><br/>
         </div>
         
@@ -115,7 +111,7 @@ const Sidebar = (props) => {
             <div className="checkbox">
               <label htmlFor="Gender Neutral">
               <input className="accessibility" type="checkbox" name="gender_neutral_restrooms" id="Gender Neutral"></input>
-              Gender Neutral<br/> Restrooms</label><br/>
+              Gender Neutral Restrooms</label><br/>
             </div>
 
             <div className="checkbox">
@@ -126,18 +122,17 @@ const Sidebar = (props) => {
 
             <div className="checkbox">
               <label htmlFor="Wheelchair Accessible">
-              <input className="accessibility" type="checkbox" name="wheelchair_accessible" id="Wheelchair Aceesible"></input>
-              Wheelchair<br/> Accessible</label><br/>
-            </div>  
+              <input className="accessibility" type="checkbox" name="wheelchair_accessible" id="Wheelchair Accessible"></input>
+               Wheelchair Accessible</label><br/>
+            </div>
           
             <div className="checkbox">
               <label htmlFor="Open To All">
               <input className="accessibility" type="checkbox" name="open_to_all" id ="Open To All"></input>
               Open To All</label><br/>
-            </div> 
+            </div>
 
           </div>
-
 
         </div>
         

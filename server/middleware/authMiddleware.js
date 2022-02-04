@@ -63,9 +63,9 @@ function signupUser(req, res, next) {
 
   // validate body of request
 
-  if (!req.body.auth) return res.status(400).json(createResponse(false, 400, 'Error: please specify username and password'));
+  if (!req.body.auth) return res.status(200).json(createResponse(false, 400, 'Error: please specify username and password'));
   const { username, password } = req.body.auth;
-  if (!username || !password) return res.status(400).json(createResponse(false, 400, 'Error: please specify username and password'));
+  if (!username || !password) return res.status(200).json(createResponse(false, 400, 'Error: please specify username and password'));
 
 
   bcrypt.hash(password, 10)
@@ -90,22 +90,22 @@ function signupUser(req, res, next) {
   })
   .catch(err => {
     if (err.constraint === 'users_username_key') {
-      return res.status(400).json(createResponse(false, 400, 'Error: user already exists'));
+      return res.status(200).json(createResponse(false, 400, 'Error: user already exists'));
     }
     return next(err);
   })
 }
 
 function loginUser(req, res, next) {
-  if (!req.body.auth) return res.status(400).json(createResponse(false, 400, 'Error: please specify username and password'));
+  if (!req.body.auth) return res.status(200).json(createResponse(false, 400, 'Error: please specify username and password'));
   const { username, password } = req.body.auth;
-  if (!username || !password) return res.status(400).json(createResponse(false, 400, 'Error: please specify username and password'));
+  if (!username || !password) return res.status(200).json(createResponse(false, 400, 'Error: please specify username and password'));
 
   const dbQuery = 'SELECT _id, pwd FROM users WHERE username = $1';
   const vars = [username];
   db.query(dbQuery, vars)
     .then(result => {
-      if (!result.rows.length) return res.status(400).json(createResponse(false, 400, 'Error: incorrect username and/or password'));
+      if (!result.rows.length) return res.status(200).json(createResponse(false, 400, 'Error: incorrect username and/or password'));
       const { _id, pwd } = result.rows[0];
       res.locals.createSession = {
         userId: _id,
@@ -116,7 +116,7 @@ function loginUser(req, res, next) {
     .then(result => {
       if (typeof result !== 'boolean') return;
       if (result === false) {
-        return res.status(400).json(createResponse(false, 400, 'Error: incorrect username and/or password'));
+        return res.status(200).json(createResponse(false, 400, 'Error: incorrect username and/or password'));
       } else {
         res.locals.createSession.valid = true;
         return next();
@@ -127,7 +127,7 @@ function loginUser(req, res, next) {
 
 function logoutUser(req, res, next) {
   const session = req.cookies.ssid;
-  if (!session) return res.status(400).json(createResponse(false, 400, 'Error: you are not logged in'));
+  if (!session) return res.status(200).json(createResponse(false, 400, 'Error: you are not logged in'));
   res.clearCookie('ssid', genCookieParams());
   const dbQuery = 'UPDATE session_log SET isactive = false WHERE ssid = $1';
   const vars = [session];
@@ -137,7 +137,7 @@ function logoutUser(req, res, next) {
 }
 
 function protectPage(req, res, next) {
-  if (!res.locals.authInfo.authenticated) return res.status(400).json(createResponse(false, 400, 'Error: you must be logged in to view this content'));
+  if (!res.locals.authInfo.authenticated) return res.status(200).json(createResponse(false, 400, 'Error: you must be logged in to view this content'));
   return next();
 }
 
@@ -147,7 +147,7 @@ function validateUsername(req, res, next) {
   const vars = [username];
   db.query(dbQuery, vars)
     .then(result => {
-      if(!result.rows.length) return res.status(400).json(createResponse(false, 400, 'Username not found'));
+      if(!result.rows.length) return res.status(200).json(createResponse(false, 400, 'Username not found'));
       else return next();
     })
     .catch(err => next(err));

@@ -9,7 +9,7 @@ router.post('/search', controller.getResults, (req, res) => {
   res.status(200).json(res.locals.searchResults);
 });
 
-router.get('/getfavorites', userController.getFavorites, /* add middleware to get business info */ (req, res) => {
+router.get('/getfavorites', userController.getFavorites, controller.getBusinessInfo, (req, res) => {
   return res.status(200).json(createResponse(true, 200, 'Favorites found', res.locals.userFavorites));
 });
 

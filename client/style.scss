@@ -198,7 +198,7 @@ input[type=checkbox]{
 
   .checkbox label {
     padding-left: 5px;
-    font-size: 14px;
+    font-size: 10px;
   }
 }
 
@@ -214,7 +214,7 @@ input[type=checkbox]{
   font-size: 16px;
   border: 1px solid $gold;
   border-radius: 5px;
-  width: 100%;
+  width: 50%;
   height: 45px;
   z-index: 1;
   box-shadow: 0px 2px 2px $shadow;
@@ -314,9 +314,10 @@ article {
   box-shadow: 0px 2px 2px $shadow;
 }
 
+
 .name {
-  color: $teal;
-  font-size: 20px;
+  color: rgb(3, 104, 104);
+  font-size: 16px;
   font-weight: bold;
   text-decoration: none;
 }
@@ -359,9 +360,10 @@ article {
 .add-comment {
   padding: 12px 0 0 1px;
   margin: 0;
-  color: $teal;
+  color: teal;
   align-self: flex-start;
   background: none;
+  font-size: 14px;
   border: none;
 }
 

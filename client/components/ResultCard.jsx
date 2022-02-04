@@ -5,7 +5,7 @@ const ResultCard = (props) => {
   return (
     <article>
       <div className="business">
-        <img className="businessImg"src={props.image}></img>
+        <img className="businessImg"src={props.image}alt={props.alias}></img>
         <div className="businessDetails">
           <p className="distance">{props.distance}</p>
           <p><a className="name" href={props.url}>{props.name}</a></p>
@@ -17,7 +17,7 @@ const ResultCard = (props) => {
       </div>
         {props.loggedIn ?
         <div className="buttonContainer">
-        <button className="addFav" onClick={() => props.addFav(props.businessID)}>Favorite</button>
+        <button className="addFav" onClick={() => props.addFavAndGetFav(props.businessID)}>Favorite</button>
         <button className="comment" onClick={props.addComment}>Comment</button>
         <CopyToClipboard text={props.url}>
           <button className="share" onClick={(e) => {e.target.innerText = 'Copied!'; setTimeout(() => {e.target.innerText = 'Share'}, 1000) }}>Share</button>

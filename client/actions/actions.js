@@ -26,7 +26,7 @@ export const getResults = (location, radius, categories, attributes) => (dispatc
 export const addFav = (businessID) => (dispatch) => {
   // modify to send favorite request to database
   console.log('ADDING TO FAVORITES, BUSINESS ID: ', businessID)
-  axios({
+  return axios({
     method: 'POST',
     // sync endpoint with backend
     url: `/api/addfavorite`,
@@ -103,7 +103,7 @@ export const validateUsername = (username) => (dispatch) => {
 
 export const userLogin = (username, password) => (dispatch) => {
   
-  axios({
+  return axios({
     method: 'POST',
     url: `/auth/login`,
     headers: { 'Content-Type': 'application/JSON' },
@@ -159,4 +159,16 @@ export const userSignup = (username, password) => (dispatch) => {
       payload: response.data,
     });
   });
+};
+
+export const userLoginAndGetFav = (username, password) => (dispatch) => {
+  
+  dispatch(userLogin(username, password))
+  .then(() => dispatch(getFav()))
+};
+
+export const addFavAndGetFav = (businessID) => (dispatch) => {
+  
+  dispatch(addFav(businessID))
+  .then(() => dispatch(getFav()))
 };

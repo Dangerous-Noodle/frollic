@@ -22,26 +22,21 @@ const mainReducer = (state = initialState, action) => {
 
   switch (action.type) {
     case types.GET_RESULTS:
-
-    return {
+      return {
         ...state,
         firstRender: false,
         searchResults: action.payload,
       }
     case types.ADD_FAV:
       // doing a deep copy using the slice method
-      const newFavs = state.favorites.slice();
-
-      if (!state.favorites.includes(action.payload)) newFavs.push(action.payload);
-      
       return {
         ...state,
-        favorites: newFavs,
       }
     case types.GET_FAV:
+      console.log('RETRIEVING FAVORITES')
       return {
         ...state,
-        favorites: action.payload,
+        favorites: action.payload.data,
       }
     case types.TOGGLE_FAVS_PAGE:
       if (!state.favsPageOn) {
