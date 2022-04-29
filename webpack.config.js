@@ -1,7 +1,7 @@
 const path = require('path');
-const webpack = require('webpack');
+// const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const process = require('process');
+// const process = require('process');
 
 module.exports = {
   // entry:[path.join(__dirname, 'client', 'index.js'), path.join(__dirname, 'client', 'style.scss')],

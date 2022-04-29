@@ -1,5 +1,5 @@
 const axios = require('axios');
-const YELP_KEY = 'Bearer kDH3a4z30wEffzgX0iyn8OTTyqvuVU4zUw9vPFzfFi9p8pFJxtEeyWyoDH1hYi2jpNNUnYmhrtu1OrwI1Q_mOMZwQbTY95bKtm8IN-xynKO82AHLjd_CS2fjfdr5YXYx';
+const { YELP_KEY } = require('../secrets/secrets');
 
 const controller = {};
 
@@ -41,8 +41,11 @@ controller.getResults = (req, res, next) => {
     res.locals.searchResults = data;
     return next();
   })
-  .catch(err => next(err));
-}
+  .catch(err => next({
+    log: `controller.getResults: ERROR: ${err}`,
+    message: { err: 'Error occurred in controller.getResults. Check server logs for more details.' },
+  }));
+};
 
 // const test = false;
 // const fakeRes = {locals: {}};
@@ -81,7 +84,10 @@ controller.getBusinessInfo = (req, res, next) => {
       res.locals.userFavorites = result;
       return next();
     })
-    .catch(err => next(err));
+    .catch(err => next({
+      log: `controller.getBusinessInfo: ERROR: ${err}`,
+      message: { err: 'Error occurred in controller.getBusinessInfo. Check server logs for more details.' },
+    }));
 }
 
 //console.log(controller.getBusinessInfo(fakeRes, fakeRes, fakeNext));

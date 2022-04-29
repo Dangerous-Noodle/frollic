@@ -17,19 +17,17 @@ const Sidebar = (props) => {
     const location = document.querySelector('input[name="location"]').value;
     const radius = document.querySelector('select[name="radius"]').value;
     
-    const checkboxes = document.querySelectorAll('input[class=categories]:checked');
-    let categories = '';
-    checkboxes.forEach((el) => categories += ',' + el.name);
-    categories = categories.slice(1);
+    const categories = Array.from(document.querySelectorAll('input[class=categories]:checked'))
+      .reduce((acc,curr) => acc += ',' + curr.name, '')
+      .slice(1);
 
-    const accessible = document.querySelectorAll('input[class=accessibility]:checked');
-    let attributes = '';
-    accessible.forEach((el)=> attributes += ',' + el.name);
-    attributes = attributes.slice(1);
+    const attributes = Array.from(document.querySelectorAll('input[class=accessibility]:checked'))
+      .reduce((acc,curr) => acc += ',' + curr.name, '')
+      .slice(1);
 
     props.getResults(location, radius, categories, attributes);
   }
-  //  onSubmit={() => {return false}}
+
   return (
     <aside>
       <form>
@@ -42,8 +40,8 @@ const Sidebar = (props) => {
         
           <div className="form-element">
             <label htmlFor="radius" className="side-header">Search Radius 
-              <select name="radius" id ='radius'>
-                <option value=".5" selected >less than 1 mile</option>
+              <select name="radius" id ='radius' defaultValue={'.5'}>
+                <option value=".5">less than 1 mile</option>
                 <option value="1">1 mile</option>
                 <option value="5">5 miles</option>
                 <option value="10">10 miles</option>
