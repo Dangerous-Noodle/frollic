@@ -3,24 +3,46 @@ import axios from 'axios';
 
 export const getResults = (location, radius, categories, attributes) => (dispatch) => {
   
-  axios({
+  fetch('/api/search', {
     method: 'POST',
-    url: `/api/search`,
-    headers: { 'Content-Type': 'application/JSON' },
-    data: {
-      location: location,
-      radius: radius,
-      categories: categories,
-      attributes: attributes,
-    }
+    headers: {
+      'Content-Type': 'application/JSON',
+    },
+    body: JSON.stringify({
+      location,
+      radius,
+      categories,
+      attributes
+    }),
   })
-  .then((response) => {
-      console.log(response.data)
-    dispatch({
-      type: types.GET_RESULTS,
-      payload: response.data,
-    });
-  });
+    .then(res => res.json())
+    .then((response) => {
+      console.log('SEARCH RESULTS:', response)
+      dispatch({
+        type: types.GET_RESULTS,
+        payload: response,
+      });
+    })
+    .catch(err => console.log('actions.js: getResults: ERROR: ', err));
+
+  // axios({
+  //   method: 'POST',
+  //   url: `/api/search`,
+  //   headers: { 'Content-Type': 'application/JSON' },
+  //   data: {
+  //     location,
+  //     radius,
+  //     categories,
+  //     attributes
+  //   }
+  // })
+  // .then((response) => {
+  //     console.log(response.data)
+  //   dispatch({
+  //     type: types.GET_RESULTS,
+  //     payload: response.data,
+  //   });
+  // });
 };
 
 export const addFav = (businessID) => (dispatch) => {
